@@ -80,7 +80,7 @@ router.post('/admin/product/insert', common.restrict, common.checkAccess, (req, 
     let doc = {
         productPermalink: req.body.frmProductPermalink,
         productTitle: req.body.frmProductTitle,
-        productPrice: req.body.frmProductPrice,
+        // productPrice: req.body.frmProductPrice,
         productDescription: req.body.frmProductDescription,
         productPublished: req.body.frmProductPublished,
         productTags: req.body.frmProductTags,
@@ -101,7 +101,7 @@ router.post('/admin/product/insert', common.restrict, common.checkAccess, (req, 
             // keep the current stuff
             req.session.productTitle = req.body.frmProductTitle;
             req.session.productDescription = req.body.frmProductDescription;
-            req.session.productPrice = req.body.frmProductPrice;
+            // req.session.productPrice = req.body.frmProductPrice;
             req.session.productPermalink = req.body.frmProductPermalink;
             req.session.productPermalink = req.body.productOptJson;
             req.session.productComment = common.checkboxBool(req.body.frmProductComment);
@@ -117,7 +117,7 @@ router.post('/admin/product/insert', common.restrict, common.checkAccess, (req, 
                     // keep the current stuff
                     req.session.productTitle = req.body.frmProductTitle;
                     req.session.productDescription = req.body.frmProductDescription;
-                    req.session.productPrice = req.body.frmProductPrice;
+                    // req.session.productPrice = req.body.frmProductPrice;
                     req.session.productPermalink = req.body.frmProductPermalink;
                     req.session.productPermalink = req.body.productOptJson;
                     req.session.productComment = common.checkboxBool(req.body.frmProductComment);
@@ -206,7 +206,7 @@ router.post('/admin/product/update', common.restrict, common.checkAccess, (req, 
                 // keep the current stuff
                 req.session.productTitle = req.body.frmProductTitle;
                 req.session.productDescription = req.body.frmProductDescription;
-                req.session.productPrice = req.body.frmProductPrice;
+                // req.session.productPrice = req.body.frmProductPrice;
                 req.session.productPermalink = req.body.frmProductPermalink;
                 req.session.productTags = req.body.frmProductTags;
                 req.session.productOptions = req.body.productOptJson;
@@ -220,7 +220,7 @@ router.post('/admin/product/update', common.restrict, common.checkAccess, (req, 
                         productTitle: req.body.frmProductTitle,
                         productDescription: req.body.frmProductDescription,
                         productPublished: req.body.frmProductPublished,
-                        productPrice: req.body.frmProductPrice,
+                        // productPrice: req.body.frmProductPrice,
                         productPermalink: req.body.frmProductPermalink,
                         productTags: req.body.frmProductTags,
                         productOptions: req.body.productOptJson,
