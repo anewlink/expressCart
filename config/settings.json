@@ -1,5 +1,5 @@
 {
-    "cartTitle": "CLOTH",
+    "cartTitle": "CrystalBrick",
     "cartDescription": "expressCart",
     "cartLogo": "",
     "baseUrl": "http://localhost:1111",
@@ -16,11 +16,11 @@
     "productsPerPage": 6,
     "menuTitle": "Menu",
     "menuLocation": "side",
-    "footerHtml": "&lt;h4 class=&quot;text-center&quot;&gt;Powered by expressCart&lt;/h4&gt;",
     "googleAnalytics": "",
-    "customCss": ".footer{padding-top: 5px;}",
+    "customCss": "",
     "currencySymbol": "£",
     "paymentGateway": "stripe",
     "databaseConnectionString": "mongodb://127.0.0.1:27017/expresscart",
-    "theme": "Cloth"
+    "theme": "Cloth",
+    "footerHtml": "&lt;h4 class=&quot;text-center&quot;&gt; &lt;/h4&gt;"
 }

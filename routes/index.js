@@ -35,7 +35,7 @@ router.get('/checkout', async (req, res, next) => {
 
     // if there is no items in the cart then render a failure
     if(!req.session.cart){
-        req.session.message = 'The are no items in your cart. Please add some items before checking out';
+        req.session.message = 'No hay productos en su solicitud. Agregue algunos para continuar.';
         req.session.messageType = 'danger';
         res.redirect('/');
         return;
@@ -61,7 +61,7 @@ router.get('/pay', async (req, res, next) => {
 
     // if there is no items in the cart then render a failure
     if(!req.session.cart){
-        req.session.message = 'The are no items in your cart. Please add some items before checking out';
+        req.session.message = 'No hay productos en su solicitud. Agregue algunos para continuar.';
         req.session.messageType = 'danger';
         res.redirect('/checkout');
         return;
@@ -104,10 +104,10 @@ router.get('/product/:id', (req, res) => {
     db.products.findOne({$or: [{_id: common.getId(req.params.id)}, {productPermalink: req.params.id}]}, (err, result) => {
         // render 404 if page is not published
         if(err){
-            res.render('error', {title: 'Not found', message: 'Product not found', helpers: req.handlebars.helpers, config});
+            res.render('error', {title: 'No lo encontramos', message: 'Este producto no existe :(', helpers: req.handlebars.helpers, config});
         }
         if(err || result == null || result.productPublished === 'false'){
-            res.render('error', {title: 'Not found', message: 'Product not found', helpers: req.handlebars.helpers, config});
+            res.render('error', {title: 'No lo encontramos', message: 'Este producto no existe :(', helpers: req.handlebars.helpers, config});
         }else{
             let productOptions = {};
             if(result.productOptions){
@@ -159,7 +159,7 @@ router.post('/product/updatecart', (req, res, next) => {
         }else{
             db.products.findOne({_id: common.getId(cartItem.productId)}, (err, product) => {
                 if(err){
-                    console.error(colors.red('Error updating cart', err));
+                    console.error(colors.red('Error actualizando solicitud', err));
                 }
                 if(product){
                     let productPrice = parseFloat(product.productPrice).toFixed(2);
@@ -180,9 +180,9 @@ router.post('/product/updatecart', (req, res, next) => {
 
         // show response
         if(hasError === false){
-            res.status(200).json({message: 'Cart successfully updated', totalCartItems: Object.keys(req.session.cart).length});
+            res.status(200).json({message: 'Solicitud actualizada', totalCartItems: Object.keys(req.session.cart).length});
         }else{
-            res.status(400).json({message: 'There was an error updating the cart', totalCartItems: Object.keys(req.session.cart).length});
+            res.status(400).json({message: 'Hubo un error actualizando su solicitud', totalCartItems: Object.keys(req.session.cart).length});
         }
     });
 });
@@ -200,7 +200,7 @@ router.post('/product/removefromcart', (req, res, next) => {
     }, () => {
         // update total cart amount
         common.updateTotalCartAmount(req, res);
-        res.status(200).json({message: 'Product successfully removed', totalCartItems: Object.keys(req.session.cart).length});
+        res.status(200).json({message: 'Producto removido exitosamente', totalCartItems: Object.keys(req.session.cart).length});
     });
 });
 
@@ -211,7 +211,7 @@ router.post('/product/emptycart', (req, res, next) => {
 
     // update total cart amount
     common.updateTotalCartAmount(req, res);
-    res.status(200).json({message: 'Cart successfully emptied', totalCartItems: 0});
+    res.status(200).json({message: 'Solicitud actualizada', totalCartItems: 0});
 });
 
 // Add item to cart
@@ -233,13 +233,13 @@ router.post('/product/addtocart', (req, res, next) => {
     // Get the item from the DB
     db.products.findOne({_id: common.getId(req.body.productId)}, (err, product) => {
         if(err){
-            console.error(colors.red('Error adding to cart', err));
-            return res.status(400).json({message: 'Error updating cart. Please try again.'});
+            console.error(colors.red('Error agregando producto a su Solicitud', err));
+            return res.status(400).json({message: 'Error actualizando su Solicitud. Intente de nuevo.'});
         }
 
         // No product found
         if(!product){
-            return res.status(400).json({message: 'Error updating cart. Please try again.'});
+            return res.status(400).json({message: 'Error actualizando su Solicitud. Intente de nuevo.'});
         }
 
         let productPrice = parseFloat(product.productPrice).toFixed(2);
@@ -287,7 +287,7 @@ router.post('/product/addtocart', (req, res, next) => {
 
         // update how many products in the shopping cart
         req.session.cartTotalItems = req.session.cart.reduce((a, b) => +a + +b.quantity, 0);
-        return res.status(200).json({message: 'Cart successfully updated', totalCartItems: req.session.cartTotalItems});
+        return res.status(200).json({message: 'Solicitud actualizada', totalCartItems: req.session.cartTotalItems});
     });
 });
 
@@ -325,7 +325,7 @@ router.get('/search/:searchTerm/:pageNum?', (req, res) => {
             results: results.data,
             filtered: true,
             session: req.session,
-            metaDescription: req.app.config.cartTitle + ' - Search term: ' + searchTerm,
+            metaDescription: req.app.config.cartTitle + ' - Búsqueda: ' + searchTerm,
             searchTerm: searchTerm,
             pageCloseBtn: common.showCartCloseBtn('search'),
             message: common.clearSessionValue(req.session, 'message'),
@@ -341,7 +341,7 @@ router.get('/search/:searchTerm/:pageNum?', (req, res) => {
         });
     })
     .catch((err) => {
-        console.error(colors.red('Error searching for products', err));
+        console.error(colors.red('Error buscando productos', err));
     });
 });
 
@@ -382,7 +382,7 @@ router.get('/category/:cat/:pageNum?', (req, res) => {
             filtered: true,
             session: req.session,
             searchTerm: searchTerm,
-            metaDescription: req.app.config.cartTitle + ' - Category: ' + searchTerm,
+            metaDescription: req.app.config.cartTitle + ' - Categoría: ' + searchTerm,
             pageCloseBtn: common.showCartCloseBtn('category'),
             message: common.clearSessionValue(req.session, 'message'),
             messageType: common.clearSessionValue(req.session, 'messageType'),
