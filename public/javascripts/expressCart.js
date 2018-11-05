@@ -1,5 +1,6 @@
 /* eslint-disable prefer-arrow-callback,  no-var, no-tabs */
 $(document).ready(function (){
+    
     // setup if material theme
     if($('#cartTheme').val() === 'Material'){
         $('.materialboxed').materialbox();
@@ -460,6 +461,7 @@ $(document).ready(function (){
 
     $(document).on('click', '.product-add-to-cart', function(e){
         var productOptions = getSelectedOptions();
+        console.log("clic .product-add-to-cart", productOptions);
 
         if(parseInt($('#product_quantity').val()) < 0){
             $('#product_quantity').val(0);
@@ -752,7 +754,9 @@ function updateCartDiv(){
 function getSelectedOptions(){
     var options = {};
     $('.product-opt').each(function(){
-        options[$(this).attr('name')] = $(this).val();
+        if($(this)[0].checked){
+            options[$(this).attr('name')] = $(this).val();
+        }
     });
 
     return options;
