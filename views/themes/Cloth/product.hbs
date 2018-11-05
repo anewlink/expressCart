@@ -29,11 +29,15 @@
                             {{/each}}
                         {{/ifCond}}
                         {{#ifCond this.optType '==' "checkbox"}}
+                            {{#each this.optOptions}}
+                            <strong>{{this.optName}}</strong>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" class="product-opt" name="opt-{{../this.optName}}" value="{{this.optName}}"><strong>{{this.optName}}</strong>
+                                    <input type="checkbox" class="product-opt" name="opt-{{../this.optName}}" 
+                                        value="{{this}}"><strong>{{this}}</strong>
                                 </label>
                             </div>
+                            {{/each}}
                         {{/ifCond}}
                     {{/each}}
                     </div>

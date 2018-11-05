@@ -461,7 +461,6 @@ $(document).ready(function (){
 
     $(document).on('click', '.product-add-to-cart', function(e){
         var productOptions = getSelectedOptions();
-        console.log("clic .product-add-to-cart", productOptions);
 
         if(parseInt($('#product_quantity').val()) < 0){
             $('#product_quantity').val(0);
@@ -751,13 +750,16 @@ function updateCartDiv(){
     });
 }
 
-function getSelectedOptions(){
+function getSelectedOptions() {
+    var optionsArray = [];
     var options = {};
-    $('.product-opt').each(function(){
-        if($(this)[0].checked){
-            options[$(this).attr('name')] = $(this).val();
+    $('.product-opt').each(function () {
+        if ($(this)[0].checked) {
+            optionsArray.push($(this).val());
         }
     });
+
+    options[$(this).attr('name')] = optionsArray.toString();
 
     return options;
 }

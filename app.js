@@ -245,7 +245,13 @@ app.use(express.static(path.join(__dirname, 'views', 'themes')));
 
 // Make stuff accessible to our router
 app.use((req, res, next) => {
+    //helper to print object values on console. Use it as: {{log something}}
+    /* handlebars.registerHelper('log', function (something) {
+        console.log(something);
+    }); */
+    
     req.handlebars = handlebars;
+     
     next();
 });
 
@@ -287,6 +293,7 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if(app.get('env') === 'development'){
+    
     app.use((err, req, res, next) => {
         console.error(colors.red(err.stack));
         res.status(err.status || 500);
