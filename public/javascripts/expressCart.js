@@ -1,6 +1,5 @@
 /* eslint-disable prefer-arrow-callback,  no-var, no-tabs */
 $(document).ready(function (){
-    
     // setup if material theme
     if($('#cartTheme').val() === 'Material'){
         $('.materialboxed').materialbox();
@@ -758,9 +757,7 @@ function getSelectedOptions() {
             optionsArray.push($(this).val());
         }
     });
-
     options[$(this).attr('name')] = optionsArray.toString();
-
     return options;
 }
 
