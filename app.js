@@ -294,6 +294,12 @@ app.use((req, res, next) => {
 // will print stacktrace
 if(app.get('env') === 'development'){
     
+    //helper to print object values on console. Use it as: {{log something}}
+    /* handlebars.registerHelper('log', function (something) {
+        console.log(something);
+    }); */
+
+
     app.use((err, req, res, next) => {
         console.error(colors.red(err.stack));
         res.status(err.status || 500);
