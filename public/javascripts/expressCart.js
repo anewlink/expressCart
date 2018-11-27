@@ -266,7 +266,7 @@ $(document).ready(function (){
         e.preventDefault();
         if($('#shipping-form').validator('validate').has('.has-error').length === 0){
             // if no form validation errors
-            var handler = window.StripeCheckout.configure({
+            /* var handler = window.StripeCheckout.configure({
                 key: $('#stripeButton').data('key'),
                 image: $('#stripeButton').data('image'),
                 locale: 'auto',
@@ -275,15 +275,48 @@ $(document).ready(function (){
                     $('#shipping-form').submit();
                 }
             });
+            console.log('handler', handler); */
+            updateCart();
+            
+            var requestObject = {};
+            requestObject.products = window.xsCart;
+            requestObject.client = {};
+            requestObject.client.email = $('#shipping-form').find('#shipEmail').val();
+            requestObject.client.name = $('#shipping-form').find('#shipFirstname').val() + ' ' + 
+                                        $('#shipping-form').find('#shipLastname').val();
+            requestObject.client.address = $('#shipping-form').find('#shipAddr1').val() + '/' +
+                                           $('#shipping-form').find('#shipAddr2').val();
+            requestObject.client.country = $('#shipping-form').find('#shipCountry').val();
+            requestObject.client.city = $('#shipping-form').find('#shipState').val();
+            requestObject.client.phone_number = $('#shipping-form').find('#shipPhoneNumber').val();
 
+            console.log("objeto de la petición"+requestObject);
+            $.ajax({
+                method: 'POST',
+                url: 'https://private-b13f1-crystalbrick.apiary-mock.com/api/quotations',
+                data: JSON.stringify(requestObject),
+                d: JSON.stringify(requestObject)
+            })
+            .done(function(msg){
+                var notificationMsg = "Su transacción ha sido exitosa. Su número de petición es: "+ msg.request_id;
+                showNotification(notificationMsg, 'success');
+            })
+            .fail(function(msg){
+                //agregar mensaje de error del servicor
+                showNotification(msg.responseJSON.message, 'danger');
+            });
+            /* 
+            data.shipPostcode = $('#shipPostcode').val();
             // open the stripe payment form
-            handler.open({
+            /* handler.open({
                 name: $('#stripeButton').data('name'),
                 description: $('#stripeButton').data('description'),
                 zipCode: $('#stripeButton').data('zipCode'),
                 amount: $('#stripeButton').data('amount'),
                 currency: $('#stripeButton').data('currency')
-            });
+            }); */
+        }else{
+            console.log('form errors');
         }
     });
 
@@ -641,7 +674,8 @@ $(document).ready(function (){
     });
 
     if($('#input_notify_message').val() !== ''){
-		// save values from inputs
+        console.log('#input_notify_message');
+        // save values from inputs
         var messageVal = $('#input_notify_message').val();
         var messageTypeVal = $('#input_notify_messageType').val();
 
@@ -716,8 +750,10 @@ function updateCart(){
         };
         cartItems.push(item);
     });
+    window.xsCart = cartItems;
 
     // update cart on server
+    console.log('data', JSON.stringify(cartItems));
     $.ajax({
         method: 'POST',
         url: '/product/updatecart',
@@ -768,6 +804,7 @@ function getSelectedOptions() {
 function showNotification(msg, type, reloadPage){
     // defaults to false
     reloadPage = reloadPage || false;
+    console.log("showNotification");
 
     $('#notify_message').removeClass();
     $('#notify_message').addClass('alert-' + type);

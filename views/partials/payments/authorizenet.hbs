@@ -11,6 +11,7 @@
 {{/ifCond}}
 <script>
     function responseHandler(data){
+        //console.log("responseHandler authorizenet");
         // Set fields from the form
         data.shipEmail = $('#shipEmail').val();
         data.shipFirstname = $('#shipFirstname').val();
@@ -21,6 +22,7 @@
         data.shipState = $('#shipState').val();
         data.shipPostcode = $('#shipPostcode').val();
         data.shipPhoneNumber = $('#shipPhoneNumber').val();
+        //console.log('data', data, JSON.stringify(data));
         $.ajax({
             method: 'POST',
             url: '/authorizenet/checkout_action',
@@ -29,6 +31,7 @@
             data: JSON.stringify(data)
         })
         .done(function(data){
+            //console.log("data done", data);
             if(data.orderId){
                 window.location = '/payment/' + data.orderId;
             }else{
@@ -36,6 +39,7 @@
             }
         })
         .fail(function(data){
+            //console.log("data fail", data);
             if(data.orderId){
                 window.location = '/payment/' + data.orderId;
             }else{
