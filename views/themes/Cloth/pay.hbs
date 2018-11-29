@@ -6,7 +6,7 @@
         <div class="col-md-5">
             <div class="panel panel-default" style="margin-top: 30px;">
                 <div class="panel-heading">Customer details</div>
-                {{#unless session.customer}}
+{{!--                 {{#unless session.customer}}
                 <div class="panel-body customer-details-login">
                     <p>Existing customer</p>
                     <div class="form-group">
@@ -22,39 +22,39 @@
                         <button id="customerLogin" class="btn btn-success pull-right" type="submit">Login</button>
                     </div>
                 </div>
-                {{/unless}}
+                {{/unless}} --}}
                 <div class="panel-body customer-details">
-                    {{#if session.customer}}
+                    {{!-- {{#if session.customer}}
                     <div class="col-xs-12 col-md-12">
                         <button id="customerLogout" class="btn btn-sm btn-success pull-right">Change customer</button>
                     </div>
-                    {{/if}}
+                    {{/if}} --}}
                     
                     <form id="shipping-form" class="shipping-form" action="/{{config.paymentGateway}}/checkout_action" method="post" role="form" data-toggle="validator" novalidate="false">
                         {{> partials/payments/shipping-form}}
-                        {{#if session.customer}}
+                        {{!-- {{#if session.customer}}
                         {{#ifCond config.paymentGateway '==' 'paypal'}}
                             {{> partials/payments/paypal}}
                         {{/ifCond}}
-                        {{/if}}
+                        {{/if}} --}}
                         {{#unless session.customer}}
-                        <div class="col-xs-12 col-md-12">
+                        {{!-- <div class="col-xs-12 col-md-12">
                             <p class="text-muted">Enter a password to create an account for next time</p>
                             <div class="form-group">
                                 <input type="password" class="form-control customerDetails" id="newCustomerPassword" name="newCustomerPassword" placeholder="Password" required>
                             </div>
                             <a id="createCustomerAccount" class="btn btn-success pull-right">Create account</a>
-                        </div>
+                        </div> --}}
                         {{/unless}}
                     </form>
-                    {{#if session.customer}}
+                    {{!-- {{#if session.customer}} --}}
                     {{#ifCond config.paymentGateway '==' 'stripe'}}
                         {{> partials/payments/stripe}}
                     {{/ifCond}}
-                    {{#ifCond config.paymentGateway '==' 'authorizenet'}}
+                    {{!-- {{#ifCond config.paymentGateway '==' 'authorizenet'}}
                         {{> partials/payments/authorizenet}}
                     {{/ifCond}}
-                    {{/if}}
+                    {{/if}} --}}
                 </div>
             </div>
         </div>
