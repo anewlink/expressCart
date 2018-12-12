@@ -48,3 +48,17 @@
         <textarea class="form-control customerDetails" placeholder="Comentarios adicionales" id="orderComment" name="orderComment"></textarea>
     </div>
 </div>
+
+<div id="pay_shopping_cart">
+    {{#each session.cart}}
+    <div class="pay_cart_product">
+        <input type="hidden" name="{{this.title}}" id="cart_product" data-product-id="{{this.productId}}"
+            data-product-name="{{this.link}}" data-product-quantity="{{this.quantity}}" data-product-key="{{@key}}">
+        <div class="pay_cart_options">
+            {{#each this.options}}
+            <input type="hidden" name="{{this.title}}" id="cart_option" value="{{this}}">
+            {{/each}}
+        </div>
+    </div>
+    {{/each}}
+</div>
