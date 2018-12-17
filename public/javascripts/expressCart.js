@@ -276,10 +276,24 @@ $(document).ready(function (){
                 }
             });
             console.log('handler', handler); */
+            var cartProducts = $('#shipping-form').find('#pay_shopping_cart .pay_cart_product').get();
+            var products = [];
+            cartProducts.forEach(product => {
+                var newproduct = {
+                   id: product.getElementsByClassName("cart_product")[0].getAttribute('name'),
+                   productId: product.getElementsByClassName("cart_product")[0].getAttribute('data-product-id'),
+                   quantity: product.getElementsByClassName("cart_product")[0].getAttribute('data-product-quantity')
+                };
+                newproduct.type = product.getElementsByClassName("cart_option")[0].value;
+                products.push(newproduct);
+            });
+            // console.log("list of products", products);
+            window.xsFinalCart = products;
+
             updateCart();
             
             var requestObject = {};
-            requestObject.products = window.xsCart;
+            requestObject.products = window.xsFinalCart;
             requestObject.client = {};
             requestObject.client.email = $('#shipping-form').find('#shipEmail').val();
             requestObject.client.name = $('#shipping-form').find('#shipFirstname').val() + ' ' + 
@@ -290,7 +304,7 @@ $(document).ready(function (){
             requestObject.client.city = $('#shipping-form').find('#shipState').val();
             requestObject.client.phone_number = $('#shipping-form').find('#shipPhoneNumber').val();
 
-            console.log("objeto de la petición"+requestObject);
+            // console.log("objeto de la petición"+requestObject);
             $.ajax({
                 method: 'POST',
                 url: 'https://private-b13f1-crystalbrick.apiary-mock.com/api/quotations',
@@ -298,8 +312,19 @@ $(document).ready(function (){
                 d: JSON.stringify(requestObject)
             })
             .done(function(msg){
-                var notificationMsg = "Su transacción ha sido exitosa. Su número de petición es: "+ msg.request_id;
-                showNotification(notificationMsg, 'success');
+                window.location = '/';
+                $.ajax({
+                    method: 'POST',
+                    url: '/product/emptycart'
+                })
+                .done(function(msg){
+                    $('#cart-count').text(msg.totalCartItems);
+                    updateCartDiv();
+                    //showNotification(msg.message, 'success', true);
+                    var notificationMsg = "Su transacción ha sido exitosa. Su número de petición es: "+ msg.request_id;
+                    showNotification(notificationMsg, 'success');
+                });
+
             })
             .fail(function(msg){
                 //agregar mensaje de error del servicor
@@ -750,10 +775,22 @@ function updateCart(){
         };
         cartItems.push(item);
     });
+    if(window.xsFinalCart) {
+        let finalCart = [...cartItems];
+        finalCart.forEach((item)=> {
+          item.quantity = item.itemQuantity;
+          delete item.itemQuantity;
+          delete item.cartIndex;
+          const match = window.xsFinalCart.find(element=>element.productId === item.productId);
+          item.type = match.type;
+          item.id = match.id;
+        });
+        window.xsFinalCart = finalCart;
+    }
     window.xsCart = cartItems;
 
     // update cart on server
-    console.log('data', JSON.stringify(cartItems));
+    /* console.log('data', JSON.stringify(cartItems)); */
     $.ajax({
         method: 'POST',
         url: '/product/updatecart',
@@ -804,7 +841,7 @@ function getSelectedOptions() {
 function showNotification(msg, type, reloadPage){
     // defaults to false
     reloadPage = reloadPage || false;
-    console.log("showNotification");
+    //console.log("showNotification");
 
     $('#notify_message').removeClass();
     $('#notify_message').addClass('alert-' + type);
