@@ -277,6 +277,7 @@ $(document).ready(function (){
             });
             console.log('handler', handler); */
             var cartProducts = $('#shipping-form').find('#pay_shopping_cart .pay_cart_product').get();
+            console.log("cartProducts",cartProducts);
             var products = [];
             cartProducts.forEach(product => {
                 var newproduct = {
@@ -285,10 +286,12 @@ $(document).ready(function (){
                    quantity: product.getElementsByClassName("cart_product")[0].getAttribute('data-product-quantity')
                 };
                 newproduct.type = product.getElementsByClassName("cart_option")[0].value;
+                console.log("new product",newproduct);
                 products.push(newproduct);
             });
             // console.log("list of products", products);
             window.xsFinalCart = products;
+            console.log("final products",products);
 
             updateCart();
             
@@ -315,7 +318,8 @@ $(document).ready(function (){
                 window.location = '/';
                 $.ajax({
                     method: 'POST',
-                    url: '/product/emptycart'
+                    url: '/product/emptycart',
+                    contentType: 'application/json'
                 })
                 .done(function(msg){
                     $('#cart-count').text(msg.totalCartItems);
