@@ -277,7 +277,7 @@ $(document).ready(function (){
             });
             console.log('handler', handler); */
             var cartProducts = $('#shipping-form').find('#pay_shopping_cart .pay_cart_product').get();
-            console.log("cartProducts",cartProducts);
+            // console.log("cartProducts",cartProducts);
             var products = [];
             cartProducts.forEach(product => {
                 var newproduct = {
@@ -286,12 +286,15 @@ $(document).ready(function (){
                    quantity: product.getElementsByClassName("cart_product")[0].getAttribute('data-product-quantity')
                 };
                 newproduct.type = product.getElementsByClassName("cart_option")[0].value;
-                console.log("new product",newproduct);
+                // console.log("new product",newproduct);
                 products.push(newproduct);
             });
             // console.log("list of products", products);
             window.xsFinalCart = products;
-            console.log("final products",products);
+            // console.log("final products:");
+            /*window.xsFinalCart.forEach(product => { 
+              console.log(product);
+            });*/
 
             updateCart();
             
@@ -301,31 +304,31 @@ $(document).ready(function (){
             requestObject.client.email = $('#shipping-form').find('#shipEmail').val();
             requestObject.client.name = $('#shipping-form').find('#shipFirstname').val() + ' ' + 
                                         $('#shipping-form').find('#shipLastname').val();
-            requestObject.client.address = $('#shipping-form').find('#shipAddr1').val() + '/' +
+            requestObject.client.address = $('#shipping-form').find('#shipAddr1').val() + ' / ' +
                                            $('#shipping-form').find('#shipAddr2').val();
             requestObject.client.country = $('#shipping-form').find('#shipCountry').val();
             requestObject.client.city = $('#shipping-form').find('#shipState').val();
             requestObject.client.phone_number = $('#shipping-form').find('#shipPhoneNumber').val();
-
+            requestObject.additional_comments = $('#shipping-form').find('#orderComment').val();
             // console.log("objeto de la petición"+requestObject);
             $.ajax({
                 method: 'POST',
                 url: 'https://private-b13f1-crystalbrick.apiary-mock.com/api/quotations',
                 data: JSON.stringify(requestObject),
-                d: JSON.stringify(requestObject)
+                d: JSON.stringify(requestObject),
+                contentType: 'application/json'
             })
             .done(function(msg){
                 window.location = '/';
                 $.ajax({
                     method: 'POST',
-                    url: '/product/emptycart',
-                    contentType: 'application/json'
+                    url: '/product/emptycart'
                 })
-                .done(function(msg){
+                .done(function(result){
                     $('#cart-count').text(msg.totalCartItems);
                     updateCartDiv();
                     //showNotification(msg.message, 'success', true);
-                    var notificationMsg = "Su transacción ha sido exitosa. Su número de petición es: "+ msg.request_id;
+                    var notificationMsg = 'Su transacción ha sido exitosa. No de petición: '+ 
                     showNotification(notificationMsg, 'success');
                 });
 
