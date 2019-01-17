@@ -318,18 +318,14 @@ $(document).ready(function (){
                 d: JSON.stringify(requestObject),
                 contentType: 'application/json'
             })
-            .done(function(msg){
-                window.location = '/';
+            .done(function(msg) {
                 $.ajax({
                     method: 'POST',
-                    url: '/product/emptycart'
+                    url: '/product/emptycart',
+                    
                 })
                 .done(function(result){
-                    $('#cart-count').text(msg.totalCartItems);
-                    updateCartDiv();
-                    //showNotification(msg.message, 'success', true);
-                    var notificationMsg = 'Su transacción ha sido exitosa. No de petición: '+ 
-                    showNotification(notificationMsg, 'success');
+                    window.location = '/?success='+msg.request_id;
                 });
 
             })

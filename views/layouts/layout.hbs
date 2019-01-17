@@ -132,7 +132,14 @@
             {{/ifCond}}
         {{/unless}}
 		<div class="container-fluid content-body" id="container">
-            <div class="row">
+        <div class="row">
+            <div id="successTransaction" class="hide alert alert-success alert-dismissible fade in" role="alert" style="background-color: mediumseagreen;" aria-hidden="true">
+                <button id="closeTransaction" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <strong>Transacción exitosa!</strong> El número de petición es: <strong id="transactionId"></strong>. Recibira copia de la transacción en
+                su correo electrónico.
+            </div>
                 {{#if admin}}
                 <div class="col-xs-12 col s12">
                     {{{body}}}
@@ -146,7 +153,7 @@
 		<input type="hidden" id="input_notify_messageType" value="{{messageType}}">
         <input type="hidden" id="cartCheckout" value="{{checkout}}">
         <input type="hidden" id="cartTheme" value="{{config.theme}}">
-		<div id="notify_message"></div>
+        <div id="notify_message"></div>
 		{{#if showFooter}}
             <footer class="footer">
                 <div class="container-fluid">
@@ -159,5 +166,26 @@
             </footer>
 		{{/if}}
         <script src="/javascripts/pushy.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var url_string = window.location.href;
+                var url = new URL(url_string);
+                var success = url.searchParams.get("success");
+                if(success) {
+                    $('#transactionId').html(success);
+                    $('#successTransaction').removeClass();
+                    $('#successTransaction').addClass('alert-sucess');
+                    $('#successTransaction').addClass('alert');
+                    $('#successTransaction').addClass('alert-dismissible');
+                    $('#successTransaction').show();
+                    $('#successTransaction').slideDown(600).delay(2500)
+                }
+
+                $('#closeTransaction').click(function() {
+                    window.history.replaceState({}, document.title, "/");
+                });
+            });
+
+        </script>
 	</body>
 </html>
